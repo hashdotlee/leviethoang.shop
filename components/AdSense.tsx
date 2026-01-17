@@ -1,39 +1,57 @@
-"use client"
+"use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-interface AdSenseProps {
-  slot?: string
-  format?: string
+declare global {
+  interface Window {
+    adsbygoogle: unknown[] | undefined;
+  }
 }
 
-export default function AdSense({ slot = "auto", format = "auto" }: AdSenseProps) {
-  // In production, replace this with actual Google AdSense code
-  // Example:
+interface AdSenseProps {
+  slot: string; // should be your numeric slot ID
+  format?: string;
+}
+
+export default function AdSense({ slot, format = "auto" }: AdSenseProps) {
+  const loadedRef = useRef(false);
+
   useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error('AdSense error:', err);
+    if (loadedRef.current) return;
+    loadedRef.current = true;
+
+    const scriptId = "adsbygoogle-js";
+    const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? "";
+
+    const pushAd = () => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (err) {
+        console.error("AdSense error:", err);
+      }
+    };
+
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.async = true;
+      script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+      script.setAttribute("data-ad-client", client);
+      script.onload = pushAd;
+      document.head.appendChild(script);
+    } else {
+      pushAd();
     }
   }, []);
 
   return (
-    <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 text-center">
-      <div className="text-gray-400 text-sm mb-2">Quảng cáo</div>
-      <div className="bg-gray-200 h-64 flex items-center justify-center">
-        <p className="text-gray-500">Google AdSense</p>
-      </div>
-      
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client="ca-pub-7147121290735021"
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
-      ></ins>
-     
-    </div>
-  )
+    <ins
+      className="adsbygoogle block"
+      style={{ display: "block" }}
+      data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT}
+      data-ad-slot={slot}
+      data-ad-format={format}
+      data-full-width-responsive="true"
+    />
+  );
 }
