@@ -55,6 +55,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   const [likesCount, setLikesCount] = useState(0)
   const [newComment, setNewComment] = useState("")
   const [submittingComment, setSubmittingComment] = useState(false)
+  const adSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT
 
   useEffect(() => {
     fetchPost()
@@ -176,7 +177,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
           {/* Left Sidebar - Ad */}
           <div className="hidden lg:block lg:col-span-2">
             <div className="sticky top-20">
-              <AdSense />
+              {adSlot ? <AdSense slot={adSlot} /> : null}
             </div>
           </div>
 
@@ -362,7 +363,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
           {/* Right Sidebar - Ad */}
           <div className="hidden lg:block lg:col-span-2">
             <div className="sticky top-20">
-              <AdSense />
+              {adSlot ? <AdSense slot={adSlot} /> : null}
             </div>
           </div>
         </div>
