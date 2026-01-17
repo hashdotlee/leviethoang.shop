@@ -8,6 +8,8 @@ declare global {
   }
 }
 
+import { useEffect } from "react"
+
 interface AdSenseProps {
   slot: string; // should be your numeric slot ID
   format?: string;
