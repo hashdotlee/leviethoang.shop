@@ -33,6 +33,7 @@ export default function Home() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>("all")
+  const adSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT
 
   useEffect(() => {
     fetchPosts()
@@ -74,7 +75,7 @@ export default function Home() {
           {/* Left Sidebar - Ad */}
           <div className="hidden lg:block lg:col-span-2">
             <div className="sticky top-20">
-              <AdSense />
+              {adSlot ? <AdSense slot={adSlot} /> : null}
             </div>
           </div>
 
@@ -148,7 +149,7 @@ export default function Home() {
           {/* Right Sidebar - Ad */}
           <div className="hidden lg:block lg:col-span-2">
             <div className="sticky top-20">
-              <AdSense />
+              {adSlot ? <AdSense slot={adSlot} /> : null}
             </div>
           </div>
         </div>
