@@ -243,7 +243,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">{post.user.name || "User"}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500" suppressHydrationWarning>
                         {formatDistanceToNow(new Date(post.createdAt), {
                           addSuffix: true,
                           locale: vi,
@@ -331,7 +331,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
                         </p>
                         <p className="text-gray-700 mt-1">{comment.content}</p>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1 ml-3">
+                      <p className="text-xs text-gray-500 mt-1 ml-3" suppressHydrationWarning>
                         {formatDistanceToNow(new Date(comment.createdAt), {
                           addSuffix: true,
                           locale: vi,
