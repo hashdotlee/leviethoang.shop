@@ -44,25 +44,39 @@ export default function Home() {
     try {
       const url = filter === "all" ? "/api/posts" : `/api/posts?category=${filter}`
       const response = await fetch(url)
+      if (!response.ok) {
+        console.error("Error fetching posts:", response.status)
+        setPosts([])
+        return
+      }
       const data = await response.json()
+      if (!Array.isArray(data)) {
+        setPosts([])
+        return
+      }
 
       // Fetch likes if user is logged in
       if (session?.user) {
         const likesResponse = await fetch("/api/posts/likes")
-        const likesData = await likesResponse.json()
-        const likedPostIds = new Set(likesData.map((like: any) => like.postId))
+        if (likesResponse.ok) {
+          const likesData = await likesResponse.json()
+          const likedPostIds = new Set(likesData.map((like: any) => like.postId))
 
-        const postsWithLikes = data.map((post: Post) => ({
-          ...post,
-          isLiked: likedPostIds.has(post.id),
-        }))
+          const postsWithLikes = data.map((post: Post) => ({
+            ...post,
+            isLiked: likedPostIds.has(post.id),
+          }))
 
-        setPosts(postsWithLikes)
+          setPosts(postsWithLikes)
+        } else {
+          setPosts(data)
+        }
       } else {
         setPosts(data)
       }
     } catch (error) {
       console.error("Error fetching posts:", error)
+      setPosts([])
     } finally {
       setLoading(false)
     }

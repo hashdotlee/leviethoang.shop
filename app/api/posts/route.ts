@@ -34,10 +34,7 @@ export async function GET(request: Request) {
     return NextResponse.json(posts)
   } catch (error) {
     console.error("Error fetching posts:", error)
-    return NextResponse.json(
-      { error: "Đã xảy ra lỗi khi tải bài đăng" },
-      { status: 500 }
-    )
+    return NextResponse.json([], { status: 200 })
   }
 }
 
