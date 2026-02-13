@@ -122,7 +122,7 @@ export default function PostCard({ post, onLikeToggle }: PostCardProps) {
             </div>
             <div className="text-sm">
               <p className="font-medium text-gray-900">{post.user.name || "User"}</p>
-              <p className="text-gray-500">
+              <p className="text-gray-500" suppressHydrationWarning>
                 {formatDistanceToNow(new Date(post.createdAt), {
                   addSuffix: true,
                   locale: vi,
